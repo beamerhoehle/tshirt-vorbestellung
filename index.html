@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>T-Shirt Vorreservierung</title>
+    <style>
+        /* --- ALLGEMEINES STYLING --- */
+        * { box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #f4f4f9; padding: 20px 10px; margin: 0; color: #333; text-align: center; }
+        
+        .wrapper { max-width: 900px; margin: 20px auto 40px auto; background: white; padding: 30px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+        
+        .status-badge { font-size: 14px; font-weight: 600; color: #dc3545; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px; display: block; }
+        h1 { font-size: 28px; margin-top: 0; margin-bottom: 10px; font-weight: 700; color: #222; }
+        .sub-info { color: #666; margin-bottom: 15px; font-size: 15px; line-height: 1.5; padding: 0 15px; }
+        
+        /* Deadline Styling */
+        .deadline-info { font-weight: bold; font-size: 16px; color: #dc3545; margin-bottom: 30px; display: block; }
+        .deadline-bottom { font-weight: bold; font-size: 15px; color: #dc3545; margin-top: 25px; text-align: center; display: block; }
+
+        /* --- FLEXBOX LAYOUT (Zentriert die Spalten am PC vertikal) --- */
+        .content-layout { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 25px;
+        }
+
+        .column-left { 
+            width: 100%; 
+        }
+        .column-right { 
+            width: 100%; 
+        }
+
+        /* --- BILDERGALERIE (Ränder und Hintergrund entfernt) --- */
+        .gallery-container { margin-bottom: 20px; }
+        .main-img-box { 
+            width: 100%; 
+            max-width: 340px; 
+            height: auto; 
+            margin: 0 auto 15px auto; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            overflow: hidden; 
+        }
+        .main-img-box img { 
+            width: 100%;
+            height: auto;
+            object-fit: contain; 
+            cursor: zoom-in; 
+            border-radius: 12px; 
+        }
+        
+        .thumbnails { display: flex; justify-content: center; gap: 12px; }
+        .thumb { width: 65px; height: 65px; object-fit: cover; border-radius: 8px; border: 2px solid transparent; cursor: pointer; background: #fafafa; -webkit-tap-highlight-color: transparent; transition: border-color 0.2s; }
+        .thumb.active { border-color: #007bff; box-shadow: 0 2px 6px rgba(0,123,255,0.15); }
+
+        /* --- GRÖSSENAUSWAHL & TOTAL-BADGE --- */
+        .size-selection { margin-bottom: 25px; text-align: left; background: #fdfdfd; padding: 15px 20px; border-radius: 10px; border: 1px solid #f0f0f0; }
+        
+        .size-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 2px solid #f0f0f0; }
+        .size-header-title { font-size: 13px; font-weight: bold; color: #888; text-transform: uppercase; letter-spacing: 0.5px; }
+        .total-badge { background-color: #e6f4ea; color: #137333; font-size: 13px; font-weight: bold; padding: 4px 10px; border-radius: 20px; text-transform: uppercase; display: none; }
+
+        .size-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #eee; }
+        .size-row:last-child { border-bottom: none; }
+        
+        .size-label-box { display: flex; flex-direction: column; }
+        .size-label { font-weight: 600; font-size: 16px; color: #222; }
+        .size-sublabel { font-size: 12px; color: #888; margin-top: 1px; }
+        
+        .counter-box { display: flex; align-items: center; gap: 18px; }
+        .btn-counter { background-color: #e9ecef; color: #333; border: none; width: 38px; height: 38px; border-radius: 50%; font-size: 20px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; user-select: none; -webkit-tap-highlight-color: transparent; }
+        .btn-counter:hover { background-color: #ddd; }
+        .count-display { font-size: 17px; font-weight: bold; min-width: 20px; text-align: center; }
+        
+        /* --- FORMULAR INPUTS --- */
+        .form-group { margin-bottom: 15px; text-align: left; }
+        .form-group label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 14px; color: #444; }
+        input[type="email"] { width: 100%; padding: 12px 15px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; background-color: white; -webkit-appearance: none; }
+        input[type="email"]:focus { border-color: #007bff; outline: none; box-shadow: 0 0 0 3px rgba(0,123,255,0.1); }
+        
+        .privacy-info { font-size: 12px; color: #777; line-height: 1.4; margin-bottom: 25px; text-align: left; padding: 0 2px; }
+
+        /* --- BUTTONSTYLING MIT HOVER UND ANIMATION --- */
+        .btn-container { display: flex; justify-content: center; width: 100%; margin-top: 5px; position: relative; }
+        .btn-submit { 
+            background-color: #ccc; 
+            color: #333; 
+            border: none; 
+            padding: 14px; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-size: 16px; 
+            width: 100%; 
+            max-width: 280px; 
+            font-weight: bold; 
+            -webkit-tap-highlight-color: transparent; 
+            position: relative;
+            overflow: visible;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+        .btn-submit:hover { 
+            background-color: #b8b8b8; 
+        }
+        .btn-submit:active {
+            transform: scale(0.98);
+        }
+        .btn-submit:disabled { 
+            background-color: #e0e0e0; 
+            color: #999; 
+            cursor: not-allowed; 
+            transform: none;
+        }
+
+        /* Der Pfeil (startet unsichtbar rechts im Button) */
+        .flying-arrow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin-left: 80px;
+            font-size: 20px;
+            color: #333;
+            pointer-events: none;
+            opacity: 0;
+            z-index: 10;
+            line-height: 0;
+        }
+
+        @keyframes flyStraightRight {
+            0% {
+                opacity: 1;
+                transform: translateY(-50%) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(300px, -50%) scale(1.3);
+            }
+        }
+
+        /* --- LIGHTBOX --- */
+        .lightbox { display: none; position: fixed; z-index: 999; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.85); justify-content: center; align-items: center; cursor: zoom-out; }
+        .lightbox img { max-width: 95%; max-height: 90%; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.5); }
+
+        /* --- AB PC-GRÖSSE --- */
+        @media (min-width: 768px) {
+            body { padding: 40px 20px; }
+            .wrapper { padding: 40px; }
+            h1 { font-size: 34px; margin-bottom: 12px; }
+            .sub-info { font-size: 16px; margin-bottom: 10px; }
+            
+            /* Nutzt Flexbox für perfekte nebeneinander liegende, vertikal zentrierte Spalten */
+            .content-layout { 
+                flex-direction: row; 
+                align-items: center; 
+                text-align: left; 
+                gap: 40px;
+            }
+            .column-left { 
+                width: 45%; 
+            }
+            .column-right { 
+                width: 55%; 
+            }
+            
+            .main-img-box { max-width: 360px; }
+            .size-selection { margin-bottom: 20px; }
+        }
+
+        /* EXTRA SCHMALE SMARTPHONES */
+        @media (max-width: 380px) {
+            body { padding: 5px; }
+            .wrapper { padding: 15px; }
+            h1 { font-size: 22px; }
+            .main-img-box { max-width: 280px; }
+            .thumb { width: 55px; height: 55px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="wrapper" id="main-card">
+        <span class="status-badge">Abstimmung beendet</span>
+        <h1>Sichere dir dein Shirt</h1>
+        <div class="sub-info">Wähle jetzt deine Größen und Mengen aus, um dir dein Shirt vorzeitig zu reservieren — damit ich die Druckmengen optimal planen kann.</div>
+        
+        <!-- Extrareihe oben -->
+        <div class="deadline-info">Ende Vorreservierung: 07.06.2026</div>
+
+        <div class="content-layout">
+            
+            <!-- Linke Spalte: Galerie -->
+            <div class="column-left">
+                <div class="gallery-container">
+                    <div class="main-img-box">
+                        <img id="main-preview" src="" alt="T-Shirt Ansicht" onclick="openLightbox()">
+                    </div>
+                    <div class="thumbnails" id="thumb-box">
+                        <!-- Wird automatisch befüllt -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Rechte Spalte: Formular und Buttons -->
+            <div class="column-right">
+                <div class="size-selection">
+                    <div class="size-header">
+                        <span class="size-header-title">Größen & Mengen</span>
+                        <span class="total-badge" id="total-pieces-badge">0 Stück</span>
+                    </div>
+
+                    <!-- Reihe S -->
+                    <div class="size-row">
+                        <div class="size-label-box">
+                            <span class="size-label">S</span>
+                            <span class="size-sublabel">Small</span>
+                        </div>
+                        <div class="counter-box">
+                            <button class="btn-counter" onclick="changeQty('s', -1)">-</button>
+                            <span class="count-display" id="count-s">0</span>
+                            <button class="btn-counter" onclick="changeQty('s', 1)">+</button>
+                        </div>
+                    </div>
+                    <!-- Reihe M -->
+                    <div class="size-row">
+                        <div class="size-label-box">
+                            <span class="size-label">M</span>
+                            <span class="size-sublabel">Medium</span>
+                        </div>
+                        <div class="counter-box">
+                            <button class="btn-counter" onclick="changeQty('m', -1)">-</button>
+                            <span class="count-display" id="count-m">0</span>
+                            <button class="btn-counter" onclick="changeQty('m', 1)">+</button>
+                        </div>
+                    </div>
+                    <!-- Reihe L -->
+                    <div class="size-row">
+                        <div class="size-label-box">
+                            <span class="size-label">L</span>
+                            <span class="size-sublabel">Large</span>
+                        </div>
+                        <div class="counter-box">
+                            <button class="btn-counter" onclick="changeQty('l', -1)">-</button>
+                            <span class="count-display" id="count-l">0</span>
+                            <button class="btn-counter" onclick="changeQty('l', 1)">+</button>
+                        </div>
+                    </div>
+                    <!-- Reihe XL -->
+                    <div class="size-row">
+                        <div class="size-label-box">
+                            <span class="size-label">XL</span>
+                            <span class="size-sublabel">Extra Large</span>
+                        </div>
+                        <div class="counter-box">
+                            <button class="btn-counter" onclick="changeQty('xl', -1)">-</button>
+                            <span class="count-display" id="count-xl">0</span>
+                            <button class="btn-counter" onclick="changeQty('xl', 1)">+</button>
+                        </div>
+                    </div>
+                    <!-- Reihe XXL -->
+                    <div class="size-row">
+                        <div class="size-label-box">
+                            <span class="size-label">XXL</span>
+                            <span class="size-sublabel">Double Extra Large</span>
+                        </div>
+                        <div class="counter-box">
+                            <button class="btn-counter" onclick="changeQty('xxl', -1)">-</button>
+                            <span class="count-display" id="count-xxl">0</span>
+                            <button class="btn-counter" onclick="changeQty('xxl', 1)">+</button>
+                        </div>
+                    </div>
+                    <!-- Reihe 3XL -->
+                    <div class="size-row">
+                        <div class="size-label-box">
+                            <span class="size-label">3XL</span>
+                            <span class="size-sublabel">Triple Extra Large</span>
+                        </div>
+                        <div class="counter-box">
+                            <button class="btn-counter" onclick="changeQty('size3xl', -1)">-</button>
+                            <span class="count-display" id="count-size3xl">0</span>
+                            <button class="btn-counter" onclick="changeQty('size3xl', 1)">+</button>
+                        </div>
+                    </div>
+                    <!-- Reihe 4XL -->
+                    <div class="size-row">
+                        <div class="size-label-box">
+                            <span class="size-label">4XL</span>
+                            <span class="size-sublabel">Four Extra Large</span>
+                        </div>
+                        <div class="counter-box">
+                            <button class="btn-counter" onclick="changeQty('size4xl', -1)">-</button>
+                            <span class="count-display" id="count-size4xl">0</span>
+                            <button class="btn-counter" onclick="changeQty('size4xl', 1)">+</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- E-Mail Feld -->
+                <div class="form-group">
+                    <label for="email">Deine E-Mail-Adresse für Updates:</label>
+                    <input type="email" id="email" placeholder="name@beispiel.de" required>
+                </div>
+
+                <!-- Hinweistext zum Datenschutz -->
+                <div class="privacy-info">
+                    Die E-Mail-Adresse wird nur zur Bestätigung der Reservierung genutzt und nicht weiterverarbeitet.
+                </div>
+
+                <!-- Absendebutton mit Animationscontainer -->
+                <div class="btn-container">
+                    <button class="btn-submit" id="submit-btn" onclick="submitReservation()">Jetzt reservieren</button>
+                    <div class="flying-arrow" id="arrow">➔</div>
+                </div>
+                
+                <!-- Extrareihe ganz unten -->
+                <div class="deadline-bottom">Ende Vorreservierung: 07.06.2026</div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Großbild-Lightbox Overlay -->
+    <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+        <img id="lightbox-img" src="" alt="Vergrößerte Ansicht">
+    </div>
+
+    <script>
+        const supabaseUrl = "https://lacnebptefldihfzbdrd.supabase.co";
+        const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxhY25lYnB0ZWZsZGloZnpiZHJkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk5ODQ1NTEsImV4cCI6MjA5NTU2MDU1MX0.l8ntSuHPG6Nhlff4VwHQ3NiQn5JbMXiiMKyp_GmKLck";
+
+        const shirtImages = [
+            "https://lacnebptefldihfzbdrd.supabase.co/storage/v1/object/public/shirt-images/No.3-(v1).jpg", 
+            "https://lacnebptefldihfzbdrd.supabase.co/storage/v1/object/public/shirt-images/No.3-(v2).jpg"
+        ];
+
+        const order = { s: 0, m: 0, l: 0, xl: 0, xxl: 0, size3xl: 0, size4xl: 0 };
+
+        function initGallery() {
+            const mainPreview = document.getElementById('main-preview');
+            const thumbBox = document.getElementById('thumb-box');
+            
+            mainPreview.src = shirtImages[0];
+            thumbBox.innerHTML = '';
+
+            shirtImages.forEach((imgUrl, index) => {
+                const img = document.createElement('img');
+                img.src = imgUrl;
+                img.className = 'thumb' + (index === 0 ? ' active' : '');
+                img.onclick = function() {
+                    document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
+                    img.classList.add('active');
+                    mainPreview.src = imgUrl;
+                };
+                thumbBox.appendChild(img);
+            });
+        }
+
+        function updateTotalBadge() {
+            const total = order.s + order.m + order.l + order.xl + order.xxl + order.size3xl + order.size4xl;
+            const badge = document.getElementById('total-pieces-badge');
+            
+            if (total > 0) {
+                badge.innerText = `${total} Stück`;
+                badge.style.display = 'inline-block';
+            } else {
+                badge.style.display = 'none';
+            }
+        }
+
+        function changeQty(size, change) {
+            const current = order[size];
+            const newQty = current + change;
+            
+            if (newQty >= 0) {
+                order[size] = newQty;
+                document.getElementById(`count-${size}`).innerText = newQty;
+                updateTotalBadge();
+            }
+        }
+
+        function triggerArrowAnimation() {
+            const arrow = document.getElementById('arrow');
+            arrow.style.animation = 'flyStraightRight 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards';
+        }
+
+        async function submitReservation() {
+            const emailInput = document.getElementById('email').value.trim();
+            
+            if (!emailInput) {
+                alert('Bitte gib eine gültige E-Mail-Adresse ein.');
+                return;
+            }
+
+            const totalShirts = order.s + order.m + order.l + order.xl + order.xxl + order.size3xl + order.size4xl;
+            if (totalShirts === 0) {
+                alert('Bitte wähle mindestens ein T-Shirt aus.');
+                return;
+            }
+
+            triggerArrowAnimation();
+
+            const btn = document.getElementById('submit-btn');
+            btn.disabled = true;
+            btn.innerText = "Wird gespeichert...";
+
+            try {
+                const response = await fetch(`${supabaseUrl}/rest/v1/reservations`, {
+                    method: 'POST',
+                    headers: {
+                        "apikey": supabaseKey,
+                        "Authorization": `Bearer ${supabaseKey}`,
+                        "Content-Type": "application/json",
+                        "Prefer": "return=minimal"
+                    },
+                    body: JSON.stringify({
+                        email: emailInput,
+                        size_s: order.s,
+                        size_m: order.m,
+                        size_l: order.l,
+                        size_xl: order.xl,
+                        size_2xl: order.xxl, 
+                        size_3xl: order.size3xl, 
+                        size_4xl: order.size4xl  
+                    })
+                });
+
+                if (!response.ok) {
+                    const err = await response.text();
+                    throw new Error(err);
+                }
+
+                await new Promise(resolve => setTimeout(resolve, 800));
+
+                document.getElementById('main-card').innerHTML = `
+                    <h2 style="color: #28a745; margin-top: 10px;">Reservierung erfolgreich!</h2>
+                    <p>Vielen Dank. Deine Daten wurden erfolgreich für die Druckplanung hinterlegt.</p>
+                    <p style="font-weight: bold; margin-top: 25px;">Deine Reservierung im Detail:</p>
+                    <ul style="text-align: left; list-style-type: square; max-width: 220px; margin: 0 auto; line-height: 1.6;">
+                        ${order.s > 0 ? `<li>Größe S: ${order.s}x</li>` : ''}
+                        ${order.m > 0 ? `<li>Größe M: ${order.m}x</li>` : ''}
+                        ${order.l > 0 ? `<li>Größe L: ${order.l}x</li>` : ''}
+                        ${order.xl > 0 ? `<li>Größe XL: ${order.xl}x</li>` : ''}
+                        ${order.xxl > 0 ? `<li>Größe XXL: ${order.xxl}x</li>` : ''}
+                        ${order.size3xl > 0 ? `<li>Größe 3XL: ${order.size3xl}x</li>` : ''}
+                        ${order.size4xl > 0 ? `<li>Größe 4XL: ${order.size4xl}x</li>` : ''}
+                    </ul>
+                    <p style="font-size: 13px; color: #777; margin-top: 25px;">Updates senden wir an: <br><strong>${emailInput}</strong></p>
+                `;
+
+            } catch (error) {
+                console.error(error);
+                alert('Fehler bei der Übertragung:\n' + error.message);
+                btn.disabled = false;
+                btn.innerText = "Jetzt reservieren";
+                document.getElementById('arrow').style.animation = 'none';
+            }
+        }
+
+        function openLightbox() {
+            const currentSrc = document.getElementById('main-preview').src;
+            document.getElementById('lightbox-img').src = currentSrc;
+            document.getElementById('lightbox').style.display = 'flex';
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').style.display = 'none';
+        }
+
+        initGallery();
+    </script>
+</body>
+</html>
