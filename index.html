@@ -13,7 +13,8 @@
         
         .status-badge { font-size: 14px; font-weight: 600; color: #dc3545; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px; display: block; }
         h1 { font-size: 28px; margin-top: 0; margin-bottom: 10px; font-weight: 700; color: #222; }
-        .sub-info { color: #666; margin-bottom: 15px; font-size: 15px; line-height: 1.5; padding: 0 15px; }
+        .sub-info { color: #666; margin-bottom: 8px; font-size: 15px; line-height: 1.5; padding: 0 15px; }
+        .price-info { font-size: 16px; font-weight: 600; color: #007bff; margin-bottom: 15px; display: block; }
         
         /* Deadline Styling */
         .deadline-info { font-weight: bold; font-size: 16px; color: #dc3545; margin-bottom: 30px; display: block; }
@@ -39,7 +40,7 @@
             width: 100%; 
             max-width: 340px; 
             height: auto; 
-            margin: 0 auto 15px auto; 
+            margin: 0 auto; 
             display: flex; 
             align-items: center; 
             justify-content: center; 
@@ -53,7 +54,7 @@
             border-radius: 12px; 
         }
         
-        .thumbnails { display: flex; justify-content: center; gap: 12px; }
+        .thumbnails { display: flex; justify-content: center; gap: 12px; margin-top: 15px; }
         .thumb { width: 65px; height: 65px; object-fit: cover; border-radius: 8px; border: 2px solid transparent; cursor: pointer; background: #fafafa; -webkit-tap-highlight-color: transparent; transition: border-color 0.2s; }
         .thumb.active { border-color: #007bff; box-shadow: 0 2px 6px rgba(0,123,255,0.15); }
 
@@ -85,7 +86,7 @@
         .privacy-info { font-size: 12px; color: #777; line-height: 1.4; margin-bottom: 25px; text-align: left; padding: 0 2px; }
 
         /* --- BUTTONSTYLING MIT HOVER UND ANIMATION --- */
-        .btn-container { display: flex; justify-content: center; width: 100%; margin-top: 5px; position: relative; }
+        .btn-container { display: flex; justify(content: center; width: 100%; margin-top: 5px; position: relative; }
         .btn-submit { 
             background-color: #ccc; 
             color: #333; 
@@ -149,9 +150,9 @@
             body { padding: 40px 20px; }
             .wrapper { padding: 40px; }
             h1 { font-size: 34px; margin-bottom: 12px; }
-            .sub-info { font-size: 16px; margin-bottom: 10px; }
+            .sub-info { font-size: 16px; margin-bottom: 5px; }
             
-            /* Nutzt Flexbox für perfekte nebeneinander liegende, vertikal zentrierte Spalten */
+            /* Spalten nebeneinander am PC */
             .content-layout { 
                 flex-direction: row; 
                 align-items: center; 
@@ -182,28 +183,25 @@
 <body>
 
     <div class="wrapper" id="main-card">
-        <span class="status-badge">Abstimmung beendet</span>
         <h1>Sichere dir dein Shirt</h1>
         <div class="sub-info">Wähle jetzt deine Größen und Mengen aus, um dir dein Shirt vorzeitig zu reservieren — damit ich die Druckmengen optimal planen kann.</div>
         
-        <!-- Extrareihe oben -->
+        <span class="price-info">Kosten pro Shirt: ca. 15–20 €</span>
+        
         <div class="deadline-info">Ende Vorreservierung: 07.06.2026</div>
 
         <div class="content-layout">
             
-            <!-- Linke Spalte: Galerie -->
             <div class="column-left">
                 <div class="gallery-container">
                     <div class="main-img-box">
                         <img id="main-preview" src="" alt="T-Shirt Ansicht" onclick="openLightbox()">
                     </div>
                     <div class="thumbnails" id="thumb-box">
-                        <!-- Wird automatisch befüllt -->
-                    </div>
+                        </div>
                 </div>
             </div>
             
-            <!-- Rechte Spalte: Formular und Buttons -->
             <div class="column-right">
                 <div class="size-selection">
                     <div class="size-header">
@@ -211,7 +209,6 @@
                         <span class="total-badge" id="total-pieces-badge">0 Stück</span>
                     </div>
 
-                    <!-- Reihe S -->
                     <div class="size-row">
                         <div class="size-label-box">
                             <span class="size-label">S</span>
@@ -223,9 +220,8 @@
                             <button class="btn-counter" onclick="changeQty('s', 1)">+</button>
                         </div>
                     </div>
-                    <!-- Reihe M -->
                     <div class="size-row">
-                        <div class="size-label-box">
+                        <div class="size-info-block">
                             <span class="size-label">M</span>
                             <span class="size-sublabel">Medium</span>
                         </div>
@@ -235,9 +231,8 @@
                             <button class="btn-counter" onclick="changeQty('m', 1)">+</button>
                         </div>
                     </div>
-                    <!-- Reihe L -->
                     <div class="size-row">
-                        <div class="size-label-box">
+                        <div class="size-info-block">
                             <span class="size-label">L</span>
                             <span class="size-sublabel">Large</span>
                         </div>
@@ -247,9 +242,8 @@
                             <button class="btn-counter" onclick="changeQty('l', 1)">+</button>
                         </div>
                     </div>
-                    <!-- Reihe XL -->
                     <div class="size-row">
-                        <div class="size-label-box">
+                        <div class="size-info-block">
                             <span class="size-label">XL</span>
                             <span class="size-sublabel">Extra Large</span>
                         </div>
@@ -259,9 +253,8 @@
                             <button class="btn-counter" onclick="changeQty('xl', 1)">+</button>
                         </div>
                     </div>
-                    <!-- Reihe XXL -->
                     <div class="size-row">
-                        <div class="size-label-box">
+                        <div class="size-info-block">
                             <span class="size-label">XXL</span>
                             <span class="size-sublabel">Double Extra Large</span>
                         </div>
@@ -271,9 +264,8 @@
                             <button class="btn-counter" onclick="changeQty('xxl', 1)">+</button>
                         </div>
                     </div>
-                    <!-- Reihe 3XL -->
                     <div class="size-row">
-                        <div class="size-label-box">
+                        <div class="size-info-block">
                             <span class="size-label">3XL</span>
                             <span class="size-sublabel">Triple Extra Large</span>
                         </div>
@@ -283,9 +275,8 @@
                             <button class="btn-counter" onclick="changeQty('size3xl', 1)">+</button>
                         </div>
                     </div>
-                    <!-- Reihe 4XL -->
                     <div class="size-row">
-                        <div class="size-label-box">
+                        <div class="size-info-block">
                             <span class="size-label">4XL</span>
                             <span class="size-sublabel">Four Extra Large</span>
                         </div>
@@ -297,31 +288,26 @@
                     </div>
                 </div>
 
-                <!-- E-Mail Feld -->
                 <div class="form-group">
                     <label for="email">Deine E-Mail-Adresse zur Reservierung:</label>
                     <input type="email" id="email" placeholder="name@beispiel.de" required>
                 </div>
 
-                <!-- Hinweistext zum Datenschutz -->
                 <div class="privacy-info">
                     Die E-Mail-Adresse wird nur zur Bestätigung der Reservierung genutzt und nicht weiterverarbeitet.
                 </div>
 
-                <!-- Absendebutton mit Animationscontainer -->
                 <div class="btn-container">
                     <button class="btn-submit" id="submit-btn" onclick="submitReservation()">Jetzt reservieren</button>
                     <div class="flying-arrow" id="arrow">➔</div>
                 </div>
                 
-                <!-- Extrareihe ganz unten -->
                 <div class="deadline-bottom">Ende Vorreservierung: 07.06.2026</div>
             </div>
 
         </div>
     </div>
 
-    <!-- Großbild-Lightbox Overlay -->
     <div id="lightbox" class="lightbox" onclick="closeLightbox()">
         <img id="lightbox-img" src="" alt="Vergrößerte Ansicht">
     </div>
