@@ -160,9 +160,9 @@
 
         .form-group label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 14px; color: #444; }
 
-        input[type="email"] { width: 100%; padding: 12px 15px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; background-color: white; -webkit-appearance: none; }
+        input[type="text"] { width: 100%; padding: 12px 15px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; background-color: white; -webkit-appearance: none; }
 
-        input[type="email"]:focus { border-color: #007bff; outline: none; box-shadow: 0 0 0 3px rgba(0,123,255,0.1); }
+        input[type="text"]:focus { border-color: #007bff; outline: none; box-shadow: 0 0 0 3px rgba(0,123,255,0.1); }
 
         
 
@@ -372,17 +372,13 @@
 
         
 
-        <!-- Extrareihe oben -->
-
-        <div class="deadline-info">Ende Vorreservierung: 07.06.2026</div>
+        <div class="deadline-info">Ende Vorreservierung: 10.06.2026</div>
 
 
 
         <div class="content-layout">
 
             
-
-            <!-- Linke Spalte: Galerie -->
 
             <div class="column-left">
 
@@ -396,17 +392,13 @@
 
                     <div class="thumbnails" id="thumb-box">
 
-                        <!-- Wird automatisch befüllt -->
-
-                    </div>
+                        </div>
 
                 </div>
 
             </div>
 
             
-
-            <!-- Rechte Spalte: Formular und Buttons -->
 
             <div class="column-right">
 
@@ -421,8 +413,6 @@
                     </div>
 
 
-
-                    <!-- Reihe S -->
 
                     <div class="size-row">
 
@@ -446,8 +436,6 @@
 
                     </div>
 
-                    <!-- Reihe M -->
-
                     <div class="size-row">
 
                         <div class="size-label-box">
@@ -469,8 +457,6 @@
                         </div>
 
                     </div>
-
-                    <!-- Reihe L -->
 
                     <div class="size-row">
 
@@ -494,8 +480,6 @@
 
                     </div>
 
-                    <!-- Reihe XL -->
-
                     <div class="size-row">
 
                         <div class="size-label-box">
@@ -517,8 +501,6 @@
                         </div>
 
                     </div>
-
-                    <!-- Reihe XXL -->
 
                     <div class="size-row">
 
@@ -542,8 +524,6 @@
 
                     </div>
 
-                    <!-- Reihe 3XL -->
-
                     <div class="size-row">
 
                         <div class="size-label-box">
@@ -565,8 +545,6 @@
                         </div>
 
                     </div>
-
-                    <!-- Reihe 4XL -->
 
                     <div class="size-row">
 
@@ -594,29 +572,23 @@
 
 
 
-                <!-- E-Mail Feld -->
-
                 <div class="form-group">
 
-                    <label for="email">Deine E-Mail-Adresse zur Reservierung:</label>
+                    <label for="email">Name (oder E-Mail) angeben:</label>
 
-                    <input type="email" id="email" placeholder="name@beispiel.de" required>
+                    <input type="text" id="email" placeholder="Dein Name oder deine E-Mail" required>
 
                 </div>
 
 
-
-                <!-- Hinweistext zum Datenschutz -->
 
                 <div class="privacy-info">
 
-                    Die E-Mail-Adresse wird nur zur Bestätigung der Reservierung genutzt und nicht weiterverarbeitet.
+                    Die Angabe wird nur zur Bestätigung der Reservierung genutzt und nicht weiterverarbeitet.
 
                 </div>
 
 
-
-                <!-- Absendebutton mit Animationscontainer -->
 
                 <div class="btn-container">
 
@@ -628,9 +600,7 @@
 
                 
 
-                <!-- Extrareihe ganz unten -->
-
-                <div class="deadline-bottom">Ende Vorreservierung: 07.06.2026</div>
+                <div class="deadline-bottom">Ende Vorreservierung: 10.06.2026</div>
 
             </div>
 
@@ -641,8 +611,6 @@
     </div>
 
 
-
-    <!-- Großbild-Lightbox Overlay -->
 
     <div id="lightbox" class="lightbox" onclick="closeLightbox()">
 
@@ -778,7 +746,7 @@
 
             if (!emailInput) {
 
-                alert('Bitte gib eine gültige E-Mail-Adresse ein.');
+                alert('Bitte gib deinen Namen oder eine E-Mail-Adresse ein.');
 
                 return;
 
@@ -892,7 +860,7 @@
 
                     </ul>
 
-                    <p style="font-size: 13px; color: #777; margin-top: 25px;">Updates senden wir an: <br><strong>${emailInput}</strong></p>
+                    <p style="font-size: 13px; color: #777; margin-top: 25px;">Hinterlegte Angabe: <br><strong>${emailInput}</strong></p>
 
                 `;
 
